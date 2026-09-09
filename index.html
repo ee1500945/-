@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>六年級成語自動造句器</title>
+    <style>
+        body {
+            font-family: "微軟正黑體", Arial, sans-serif;
+            background-color: #f0f8ff;
+            display: flex;
+            justify-content: center;
+            padding: 20px;
+        }
+        .container {
+            background-color: #ffffff;
+            width: 100%;
+            max-width: 600px;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        }
+        h1 {
+            color: #2c3e50;
+            text-align: center;
+        }
+        .input-group {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+        input[type="text"] {
+            flex: 1;
+            padding: 10px;
+            font-size: 16px;
+            border: 2px solid #3498db;
+            border-radius: 8px;
+            outline: none;
+        }
+        button {
+            padding: 10px 20px;
+            font-size: 16px;
+            background-color: #3498db;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+        button:hover {
+            background-color: #2980b9;
+        }
+        .result-box {
+            background-color: #f9f9f9;
+            border-left: 5px solid #2ecc71;
+            padding: 15px;
+            border-radius: 5px;
+            margin-top: 20px;
+        }
+        .chengyu-title {
+            font-size: 22px;
+            font-weight: bold;
+            color: #27ae60;
+            margin-bottom: 8px;
+        }
+        .explanation {
+            font-size: 15px;
+            color: #555;
+            margin-bottom: 12px;
+        }
+        .sentence {
+            font-size: 18px;
+            color: #333;
+            line-height: 1.6;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>📝 成語自動造句小幫手</h1>
+    <p>請點擊「隨機生成造句」，或是輸入成語搜尋：</p>
+    
+    <div class="input-group">
+        <input type="text" id="searchInput" placeholder="輸入成語（如：胸有成竹）">
+        <button onclick="searchSentence()">搜尋造句</button>
+        <button onclick="getRandomSentence()" style="background-color: #e67e22;">隨機造句</button>
+    </div>
+
+    <div class="result-box" id="resultBox">
+        <div class="chengyu-title" id="chengyuTitle">準備好了嗎？</div>
+        <div class="explanation" id="chengyuMeaning">請點擊上方按鈕開始生成成語造句！</div>
+        <div class="sentence" id="chengyuSentence"></div>
+    </div>
+</div>
+
+<script>
+    // 六年級常用成語資料庫（可自行增加更多成語）
+    const chengyuData = [
+        {
+            word: "胸有成竹",
+            meaning: "比喻做事之前已經有通盤的考慮與把握。",
+            sentence: "對於明天的數學演講比賽，他早已準備充分，胸有成竹。"
+        },
+        {
+            word: "畫蛇添足",
+            meaning: "比喻多此一舉，不但沒有好處，反而把事情弄糟糕。",
+            sentence: "這幅畫本來已經很完美了，你又加上這幾筆簡直是畫蛇添足。"
+        },
+        {
+            word: "半途而廢",
+            meaning: "事情還沒做完就停止，比喻做事不能堅持到底。",
+            sentence: "學習任何技能都需要堅持，如果半途而廢，之前的努力就白費了。"
+        },
+        {
+            word: "井底之蛙",
+            meaning: "比喻見識狹小的人。",
+            sentence: "我們要多讀書、多出去走走，才不會成為眼界狹小的井底之蛙。"
+        },
+        {
+            word: "井井有條",
+            meaning: "形容條理分明，整齊不亂。",
+            sentence: "班長把班級活動安排得井井有條，大家都很佩服他。"
+        },
+        {
+            word: "同心協力",
+            meaning: "團結一致，共同努力。",
+            sentence: "只要大家同心協力，就沒有克服不了的困難。"
+        },
+        {
+            word: "鍥而不捨",
+            meaning: "比喻有恆心、有毅力，堅持到底不放棄。",
+            sentence: "憑著鍥而不捨的精神，他終於克服了難題，取得了優異的成績。"
+        }
+    ];
+
+    // 隨機生成造句
+    function getRandomSentence() {
+        const randomIndex = Math.floor(Math.random() * chengyuData.length);
+        const item = chengyuData[randomIndex];
+        displayResult(item.word, item.meaning, item.sentence);
+    }
+
+    // 搜尋指定成語
+    function searchSentence() {
+        const input = document.getElementById("searchInput").value.trim();
+        if (input === "") {
+            alert("請先輸入成語喔！");
+            return;
+        }
+
+        const found = chengyuData.find(item => item.word === input);
+        
+        if (found) {
+            displayResult(found.word, found.meaning, found.sentence);
+        } else {
+            // 如果資料庫沒有，提供簡易範例
+            displayResult(
+                input, 
+                "（自訂成語）", 
+                `只要我們靈活運用「${input}」，就能讓文章變得更加生動精采。`
+            );
+        }
+    }
+
+    // 顯示結果到畫面上
+    function displayResult(title, meaning, sentence) {
+        document.getElementById("chengyuTitle").innerText = title;
+        document.getElementById("chengyuMeaning").innerText = "意思：" + meaning;
+        document.getElementById("chengyuSentence").innerText = "造句：" + sentence;
+    }
+</script>
+
+</body>
+</html>
